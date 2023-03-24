@@ -1,0 +1,14 @@
+chess
+os
+tkinter
+webbrowser
+sys
+Stockfish
+datetime
+opencv-python
+numpy
+Pillow
+subprocess
+ttk
+tensorflow
+matplotlib
