@@ -69,7 +69,7 @@ The "**Editor**" button takes the current FEN position of the chess board and op
 
 The "**Analysis**" button takes the current FEN position of the chess board and opens it in the lichess.org's game analysis page. Users can then analyze the position with the built-in chess engine and explore possible moves and variations.
 
-![Lichess Board Editor](https://i.imgur.com/gaPfb8V.png)
+![Lichess Board Editor](https://i.imgur.com/NpUjHBS.png)
 
 **FEN History** 
 
