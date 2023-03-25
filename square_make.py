@@ -6,6 +6,7 @@ import os
 load_dotenv()
 
 Chess_Board_ML = os.getenv("Chess_Board_ML_DIR")
+_64_squares = os.getenv("64_squares_DIR")
 
 def crop_chess_board_squares(input_image_path, output_folder, square_size=0):
     #!                                                      DONT FORGET TO CHANGE
@@ -30,7 +31,7 @@ def crop_chess_board_squares(input_image_path, output_folder, square_size=0):
 if __name__ == '__main__':
     screenshot_path = f'{Chess_Board_ML}screenshot.png'
     input_image_path = f'{Chess_Board_ML}cropped_chessboard.png'
-    output_folder = f'{Chess_Board_ML}64_squares'
+    output_folder = f'{_64_squares}'
 
     dimensions = crop_chessboard(screenshot_path)
     
