@@ -1,3 +1,0 @@
-FEN: 8/5p2/2p4p/p3k2P/3p2P1/1P1K4/P4P2/8 w - - 0 1 , Time: 22:17, Date: 24-03-2023
-FEN: 8/5p2/2p4p/p3k2P/3p2P1/1P1K4/P4P2/8 w - - 0 1 , Time: 22:24, Date: 24-03-2023
-FEN: 5r1k/pQ4pp/2n2q2/8/3pR3/3P4/PB1P2PP/R5K1 b - - 0 1 , Time: 23:0, Date: 24-03-2023
