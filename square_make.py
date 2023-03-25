@@ -28,6 +28,7 @@ def crop_chess_board_squares(input_image_path, output_folder, square_size=0):
             cropped_square.save(output_file_name)
             count += 1
 
+
 if __name__ == '__main__':
     screenshot_path = f'{Chess_Board_ML}screenshot.png'
     input_image_path = f'{Chess_Board_ML}cropped_chessboard.png'
