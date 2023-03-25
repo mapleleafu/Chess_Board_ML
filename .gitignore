@@ -1,5 +1,6 @@
 cropped_chessboard.png
 fen_history.txt
 screenshot.png
-_64_squares/
 ALL_IMAGES/
+_64_squares/*
+!_64_squares/.gitkeep
