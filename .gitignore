@@ -4,3 +4,4 @@ screenshot.png
 ALL_IMAGES/
 _64_squares/*
 !_64_squares/.gitkeep
+__pycache__
