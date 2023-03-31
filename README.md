@@ -4,7 +4,15 @@
 
  #   **Project Documentation**
 
-This project aims to capture a screenshot of a chessboard displayed on the computer screen, find the chess board from the screenshot, crop the chessboard out of the screenshot, and then split it into 64 individual squares representing each piece on the board. Finally, the program uses a trained image recognition model in Tensorflow to identify the type of piece in each square.
+This project aims to:
+
+- Capture a screenshot of a chessboard displayed on the computer screen.
+- Find the chess board from the screenshot.
+- Crop the chessboard out of the screenshot.
+- Split the chessboard into 64 individual squares representing each piece on the board.
+- Use a trained image recognition model in Tensorflow to identify the type of piece in each square.
+
+The ultimate goal of the project is to identify the type of piece in each square of a chessboard. This involves a number of steps, including capturing and processing a screenshot of the chessboard, isolating individual squares on the board, and using machine learning to recognize the type of piece in each square.
 
 ![Trained model](https://i.imgur.com/1glnIh6.png)
 
