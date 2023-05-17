@@ -9,10 +9,10 @@ def main():
 
 def screenshot_button_click(screenshot_error_label):
     try:
-        output = subprocess.check_output(["python", "screenshot.py"], stderr=subprocess.STDOUT)
-        output += subprocess.check_output(["python", "crop_the_screenshot.py"], stderr=subprocess.STDOUT)
-        output += subprocess.check_output(["python", "square_make.py"], stderr=subprocess.STDOUT)
-        output += subprocess.check_output(["python", "board_display_and_actions.py"], stderr=subprocess.STDOUT)
+        output = subprocess.check_output(["python", "screenshot.py"], stderr=subprocess.STDOUT, creationflags=subprocess.CREATE_NO_WINDOW)
+        output += subprocess.check_output(["python", "crop_the_screenshot.py"], stderr=subprocess.STDOUT, creationflags=subprocess.CREATE_NO_WINDOW)
+        output += subprocess.check_output(["python", "square_make.py"], stderr=subprocess.STDOUT, creationflags=subprocess.CREATE_NO_WINDOW)
+        output += subprocess.check_output(["python", "board_display_and_actions.py"], stderr=subprocess.STDOUT, creationflags=subprocess.CREATE_NO_WINDOW)
         screenshot_error_label.config(text="")
         return True
     except subprocess.CalledProcessError as e:

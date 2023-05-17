@@ -49,6 +49,7 @@ The ultimate goal of the project is to identify the type of piece in each square
 # Usage
 
 To run the program, run the ```main.py``` script. A GUI window will appear with two buttons: "**Take a Screenshot**" and "**Load FEN**".
+Another option is to run the ```main.exe``` file.
 
 ![Main Window](https://i.imgur.com/Hg6Drog.png)
 
