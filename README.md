@@ -32,7 +32,7 @@ The ultimate goal of the project is to identify the type of piece in each square
 # Libraries
 
 - ***chess***    
- - ***os***    
+- ***os***    
 - ***tkinter***   
 - ***webbrowser***   
 - ***sys***   
@@ -44,7 +44,8 @@ The ultimate goal of the project is to identify the type of piece in each square
 - ***subprocess***  
 - ***ttk***  
 - ***tensorflow*** 
-- ***matplotlib***      
+- ***matplotlib***
+- ***pyinstaller***      
 
 # Usage
 
