@@ -8,10 +8,8 @@ load_dotenv()
 Chess_Board_ML = os.getenv("Chess_Board_ML_DIR")
 _64_squares = os.getenv("64_squares_DIR")
 
-def crop_chess_board_squares(input_image_path, output_folder, square_size=0):
+def crop_chess_board_squares(image, output_folder, square_size=0):
     #!                                                      DONT FORGET TO CHANGE
-    image = Image.open(input_image_path)
-    width, height = image.size
     square_width, square_height = square_size, square_size
     letters = ["A", "B", "C", "D", "E", "F", "G", "H", ]
     for i in range(0, 8):
@@ -29,18 +27,10 @@ def crop_chess_board_squares(input_image_path, output_folder, square_size=0):
             count += 1
 
 
-if __name__ == '__main__':
-    screenshot_path = f'{Chess_Board_ML}screenshot.png'
-    input_image_path = f'{Chess_Board_ML}cropped_chessboard.png'
+def square_maker(img, cropped):
     output_folder = f'{_64_squares}'
-
-    dimensions = crop_chessboard(screenshot_path)
-    
-    if dimensions is not None:
-        width, height = dimensions
-        square_size = width // 8
-        crop_chess_board_squares(input_image_path, output_folder, square_size)
-    else:
-        print("Failed to get dimensions.")
+    width, height = cropped.size
+    square_size = width // 8
+    crop_chess_board_squares(cropped, output_folder, square_size)
 
 

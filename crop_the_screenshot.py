@@ -46,30 +46,24 @@ def find_chessboard(image, canny_low=50, canny_high=150):
 
 
 
-def crop_chessboard(image_path, padding=3):
-    image = cv2.imread(image_path)
-    chessboard_coordinates = find_chessboard(image)
+def crop_chessboard(image, padding=3):
+    cv2_img = np.array(image)
+    chessboard_coordinates = find_chessboard(cv2_img)
 
     if chessboard_coordinates is not None:
         x1, y1, x2, y2 = chessboard_coordinates
 
         x1 = max(x1 - padding, 0)
         y1 = max(y1 - padding, 0)
-        x2 = min(x2 + padding, image.shape[1])
-        y2 = min(y2 + padding, image.shape[0])
+        x2 = min(x2 + padding, cv2_img.shape[1])
+        y2 = min(y2 + padding, cv2_img.shape[0])
 
-        with Image.open(image_path) as img:
-            cropped_img = img.crop((x1, y1, x2, y2))
-            cropped_img.save('cropped_chessboard.png')
-        width = x2 - x1
-        height = y2 - y1
-        return width, height
+        cropped_img = image.crop((x1, y1, x2, y2))
+        cropped_img.save('cropped_chessboard.png')
+
+        return cropped_img
     else:
         print("Chessboard not found in the image.")
         return None
-
-if __name__ == '__main__':
-    screenshot_path = f'{Chess_Board_ML}screenshot.png'
-    crop_chessboard(screenshot_path)
 
 
