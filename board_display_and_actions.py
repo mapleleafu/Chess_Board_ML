@@ -291,9 +291,8 @@ class ChessBoardGUI(tk.Tk):
                 self.images.append(photo)  # Add this line to store the image reference in the list
         
 
-def board_display():
-    # fen = sys.argv[1] if len(sys.argv) > 1 else white_fen
-    # app = ChessBoardGUI(fen, stockfish)
-    # app.mainloop()
-    print("test")
+if __name__ == "__main__":
+    fen = sys.argv[1] if len(sys.argv) > 1 else white_fen
+    app = ChessBoardGUI(fen, stockfish)
+    app.mainloop()
 

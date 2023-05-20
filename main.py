@@ -5,7 +5,7 @@ from tkinter import ttk
 from screenshot import grab_screen
 from crop_the_screenshot import crop_chessboard
 from square_make import square_maker
-from board_display_and_actions import board_display
+
 
 def main():
     run_mainloop()
@@ -15,9 +15,7 @@ def screenshot_button_click(screenshot_error_label):
         img = grab_screen()
         cropped_img = crop_chessboard(img)
         square_maker(img, cropped_img)
-        #board_display()
-        
-        #output += subprocess.check_output(["python", "board_display_and_actions.py"], stderr=subprocess.STDOUT, creationflags=subprocess.CREATE_NO_WINDOW)
+        output = subprocess.check_output(["python", "board_display_and_actions.py"], stderr=subprocess.STDOUT, creationflags=subprocess.CREATE_NO_WINDOW)
         screenshot_error_label.config(text="")
         return True
     except subprocess.CalledProcessError as e:
