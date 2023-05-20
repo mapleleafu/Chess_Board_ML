@@ -1,15 +1,17 @@
-import chess
 import os
+import os.path
+import sys
 import tkinter as tk
 import webbrowser
-import sys
-import os.path
-from PIL import Image, ImageTk
-from square_test import get_chess_board_predictions
-from black_to_play import rotate_board_and_change_side
-from stockfish import Stockfish
 from datetime import datetime
+
+import chess
+from PIL import Image, ImageTk
 from dotenv import load_dotenv
+
+from black_to_play import rotate_board_and_change_side
+from square_test import get_chess_board_predictions
+from stockfish import Stockfish
 
 load_dotenv()
 
@@ -36,44 +38,48 @@ white_to_play_press = False
 reversed = False
 
 
-if len(sys.argv) <= 1:
-    predictions = get_chess_board_predictions()
+def init():
+    white_fen = None
+    black_fen = None
+    if len(sys.argv) <= 1:
+        predictions = get_chess_board_predictions()
 
-    board = chess.Board.empty()
+        board = chess.Board.empty()
 
-    for file_path, piece in predictions.items():
-        square_name = os.path.splitext(os.path.basename(file_path))[0]  
-        square_int = chess.parse_square(square_name.lower())
+        for file_path, piece in predictions.items():
+            square_name = os.path.splitext(os.path.basename(file_path))[0]
+            square_int = chess.parse_square(square_name.lower())
 
-        if piece != "zEmpty":
-            piece_symbol = PIECE_MAP[piece]
-            piece_obj = chess.Piece.from_symbol(piece_symbol)
-            board.set_piece_at(square_int, piece_obj)
+            if piece != "zEmpty":
+                piece_symbol = PIECE_MAP[piece]
+                piece_obj = chess.Piece.from_symbol(piece_symbol)
+                board.set_piece_at(square_int, piece_obj)
 
-    white_fen = board.fen()
-    print(white_fen)
+        white_fen = board.fen()
+        print(white_fen)
 
-    black_fen = rotate_board_and_change_side(white_fen)
-    print(black_fen)
+        black_fen = rotate_board_and_change_side(white_fen)
+        print(black_fen)
 
-else:
-    def get_color_to_move(fen):
-        fen_parts = fen.split()
-        return fen_parts[1]
-    color_to_move = get_color_to_move(sys.argv[1])
-    
-
-    if color_to_move == "w":
-        white_fen = sys.argv[1]
-        white_to_play_press = True
     else:
-        black_fen = sys.argv[1] 
-        reversed = True 
+        def get_color_to_move(fen):
+            fen_parts = fen.split()
+            return fen_parts[1]
+
+        color_to_move = get_color_to_move(sys.argv[1])
+
+        if color_to_move == "w":
+            white_fen = sys.argv[1]
+            white_to_play_press = True
+        else:
+            black_fen = sys.argv[1]
+            reversed = True
+
+    return white_fen, black_fen
 
 
-# Tkinter GUI
-class ChessBoardGUI(tk.Tk):
-    def __init__(self, fen, stockfish, img=None):
+class ChessBoardGUI(tk.Tk,):
+    def __init__(self, fen,  white_fen, black_fen, stockfish, img=None):
         super().__init__()
         self.title("Chess Board")
         self.geometry("400x480")
@@ -98,12 +104,13 @@ class ChessBoardGUI(tk.Tk):
         self.analysis_button_frame = tk.Frame(self.button_area, height=50, width=200)
         self.analysis_button_frame.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
 
-        self.white_to_play = tk.Button(self.left_button_frame, text="White to play", command=lambda: self.white_button_action(white_fen))
+        self.white_to_play = tk.Button(self.left_button_frame, text="White to play",
+                                       command=lambda: self.white_button_action(white_fen))
         self.white_to_play.pack(side=tk.LEFT, padx=10, pady=10)
-    
-        self.black_to_play = tk.Button(self.analysis_button_frame, text="Black to play", command=lambda: self.black_button_action(black_fen))
-        self.black_to_play.pack(side=tk.RIGHT, padx=10, pady=10)
 
+        self.black_to_play = tk.Button(self.analysis_button_frame, text="Black to play",
+                                       command=lambda: self.black_button_action(black_fen))
+        self.black_to_play.pack(side=tk.RIGHT, padx=10, pady=10)
 
         if white_to_play_press == True:
             self.white_to_play.invoke()
@@ -113,7 +120,7 @@ class ChessBoardGUI(tk.Tk):
     def save_fen_history(self, fen_history):
         current_date = datetime.now().strftime("%d-%m-%Y")
         hour = datetime.now().hour
-        minute = datetime.now().minute  
+        minute = datetime.now().minute
         filename = "fen_history.txt"
 
         with open(filename, "a") as f:
@@ -123,22 +130,21 @@ class ChessBoardGUI(tk.Tk):
     def hide_history_button(self):
         self.history_button.place(x=-200, y=self.button_area['height'] - 5, width=70, height=25)
 
-
     def create_history_button(self):
         button_width = 70
         button_height = 25
         padx = 5
 
         if not hasattr(self, 'history_button'):  # Check if the history_button attribute exists
-            self.history_button = tk.Button(self.button_area, text="FEN History", command=self.history_button_action, width=button_width, state=tk.DISABLED)
-            self.history_button.place(x=padx, y=self.button_area['height'] - 5, width=button_width, height=button_height)  # Adjust the y-coordinate
-
+            self.history_button = tk.Button(self.button_area, text="FEN History", command=self.history_button_action,
+                                            width=button_width, state=tk.DISABLED)
+            self.history_button.place(x=padx, y=self.button_area['height'] - 5, width=button_width,
+                                      height=button_height)  # Adjust the y-coordinate
 
     def create_evaluation_best_move_buttons(self):
         self.white_to_play.destroy()
         self.black_to_play.destroy()
         self.create_history_button()
-
 
         self.best_move = self.stockfish.get_best_move()
         self.eval = self.stockfish.get_evaluation()
@@ -148,26 +154,39 @@ class ChessBoardGUI(tk.Tk):
         button_height = 25
         padx = 5
         middle_button_space = 10
-        offset = 3 # Change this value to adjust the height of the labels
+        offset = 3  # Change this value to adjust the height of the labels
 
-        self.evaluation_button = tk.Button(self.button_area, text="Evaluation", command=self.evaluation_button_action, width=button_width)
-        self.evaluation_button.place(x=padx, y=(self.button_area['height'] - button_height) // 2, width=button_width, height=button_height)
+        self.evaluation_button = tk.Button(self.button_area, text="Evaluation", command=self.evaluation_button_action,
+                                           width=button_width)
+        self.evaluation_button.place(x=padx, y=(self.button_area['height'] - button_height) // 2, width=button_width,
+                                     height=button_height)
 
         self.evaluation_label = tk.Label(self.button_area, text="")
-        self.evaluation_label.place(x=padx + button_width, y=((self.button_area['height'] - button_height) // 2) + offset)
+        self.evaluation_label.place(x=padx + button_width,
+                                    y=((self.button_area['height'] - button_height) // 2) + offset)
 
-        self.editor_button = tk.Button(self.button_area, text="Editor", command=lambda: self.editor_button_action(self.fen), width=middle_button_width)
-        self.editor_button.place(x=(self.button_area['width'] - middle_button_width * 2 - middle_button_space) // 2, y=(self.button_area['height'] - button_height) // 2, width=middle_button_width, height=button_height)
+        self.editor_button = tk.Button(self.button_area, text="Editor",
+                                       command=lambda: self.editor_button_action(self.fen), width=middle_button_width)
+        self.editor_button.place(x=(self.button_area['width'] - middle_button_width * 2 - middle_button_space) // 2,
+                                 y=(self.button_area['height'] - button_height) // 2, width=middle_button_width,
+                                 height=button_height)
 
-        self.analysis_button = tk.Button(self.button_area, text="Analysis", command=lambda: self.analysis_button_action(self.fen), width=middle_button_width)
-        self.analysis_button.place(x=(self.button_area['width'] + middle_button_space) // 2, y=(self.button_area['height'] - button_height) // 2, width=middle_button_width, height=button_height)
+        self.analysis_button = tk.Button(self.button_area, text="Analysis",
+                                         command=lambda: self.analysis_button_action(self.fen),
+                                         width=middle_button_width)
+        self.analysis_button.place(x=(self.button_area['width'] + middle_button_space) // 2,
+                                   y=(self.button_area['height'] - button_height) // 2, width=middle_button_width,
+                                   height=button_height)
 
-        self.best_move_button = tk.Button(self.button_area, text="Best move", command=self.best_move_button_action, width=button_width, fg="#000000") #fg="red" add to the end for the color
-        self.best_move_button.place(x=self.button_area['width'] - button_width - padx, y=(self.button_area['height'] - button_height) // 2, width=button_width, height=button_height)
+        self.best_move_button = tk.Button(self.button_area, text="Best move", command=self.best_move_button_action,
+                                          width=button_width, fg="#000000")  # fg="red" add to the end for the color
+        self.best_move_button.place(x=self.button_area['width'] - button_width - padx,
+                                    y=(self.button_area['height'] - button_height) // 2, width=button_width,
+                                    height=button_height)
 
         self.best_move_label = tk.Label(self.button_area, text="")
-        self.best_move_label.place(x=self.button_area['width'] - button_width * 2 - padx * 2 + 35, y=((self.button_area['height'] - button_height) // 2) + offset) 
-
+        self.best_move_label.place(x=self.button_area['width'] - button_width * 2 - padx * 2 + 35,
+                                   y=((self.button_area['height'] - button_height) // 2) + offset)
 
         self.fen_history = []
 
@@ -183,7 +202,6 @@ class ChessBoardGUI(tk.Tk):
         self.fen_history.append(self.fen)  # Add this line to append the current FEN to the history list
         self.save_fen_history(self.fen_history)
 
-
     def black_button_action(self, fen):
         self.create_evaluation_best_move_buttons()
         self.fen = black_fen
@@ -195,7 +213,6 @@ class ChessBoardGUI(tk.Tk):
         self.history_button.config(state=tk.NORMAL)  # Enable the FEN History button
         self.fen_history.append(self.fen)  # Add this line to append the current FEN to the history list
         self.save_fen_history(self.fen_history)
-
 
     def evaluation_button_action(self):
         print("Evaluation button clicked!")
@@ -210,26 +227,22 @@ class ChessBoardGUI(tk.Tk):
             text1 = f"{self.eval['type'].capitalize()} in {_}"
             self.evaluation_label.config(text=text1, fg="green")
 
-
     def best_move_button_action(self):
         print("Best move button clicked!")
         self.best_move = self.stockfish.get_best_move()
         self.best_move_label.config(text=self.best_move, fg="green")
 
-
-    def analysis_button_action(self,fen):
+    def analysis_button_action(self, fen):
         print("analysis button clicked!")
         fen_with_underscores = fen.replace(" ", "_")
         url = f"https://lichess.org/analysis/{fen_with_underscores}"
         webbrowser.open_new_tab(url)
-
 
     def editor_button_action(self, fen):
         print("Editor button clicked!")
         fen_with_underscores = fen.replace(" ", "_")
         url = f"https://lichess.org/editor/{fen_with_underscores}"
         webbrowser.open_new_tab(url)
-
 
     def history_button_action(self):
         print("History button clicked!")
@@ -241,7 +254,7 @@ class ChessBoardGUI(tk.Tk):
         scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
 
         history_listbox = tk.Listbox(history_window, yscrollcommand=scrollbar.set)
-        
+
         # Read the FEN history from the file
         filename = "fen_history.txt"
         if os.path.isfile(filename):
@@ -254,8 +267,6 @@ class ChessBoardGUI(tk.Tk):
 
         scrollbar.config(command=history_listbox.yview)
 
-
-
     def draw_board(self):
         colors = ["white", "light gray"]
         square_size = 400 // 8
@@ -266,7 +277,6 @@ class ChessBoardGUI(tk.Tk):
                     i * square_size, j * square_size, (i + 1) * square_size, (j + 1) * square_size, fill=color
                 )
 
-
     def draw_pieces(self):
         self.canvas.delete("all")  # Add this line to clear the canvas
         self.draw_board()  # Add this line to redraw the board
@@ -276,7 +286,9 @@ class ChessBoardGUI(tk.Tk):
             if piece:
                 piece_color = "w" if piece.color == chess.WHITE else "b"
                 image_path = f"images_for_board_display/{piece_color}{piece.symbol().upper()}.png"
+                print("~image-path", image_path)
                 image = Image.open(image_path)
+                print("~image", image)
                 image = image.resize((square_size, square_size), Image.LANCZOS)
                 photo = ImageTk.PhotoImage(image)
 
@@ -289,11 +301,11 @@ class ChessBoardGUI(tk.Tk):
                     image=photo,
                 )
                 self.images.append(photo)  # Add this line to store the image reference in the list
-        
+
 
 def board_display():
-    # fen = sys.argv[1] if len(sys.argv) > 1 else white_fen
-    # app = ChessBoardGUI(fen, stockfish)
-    # app.mainloop()
+    white_fen, black_fen = init()
+    fen = sys.argv[1] if len(sys.argv) > 1 else white_fen
+    app = ChessBoardGUI(fen, white_fen, black_fen, stockfish)
+    app.mainloop()
     print("test")
-

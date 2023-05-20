@@ -1,23 +1,22 @@
-import tkinter as tk
 import subprocess
-import chess
+import tkinter as tk
 from tkinter import ttk
-from screenshot import grab_screen
-from crop_the_screenshot import crop_chessboard
-from square_make import square_maker
-from board_display_and_actions import board_display
 
-def main():
-    run_mainloop()
+import chess
+
+from board_display_and_actions import board_display
+from crop_the_screenshot import crop_chessboard
+from screenshot import grab_screen
+from square_make import square_maker
+
 
 def screenshot_button_click(screenshot_error_label):
     try:
         img = grab_screen()
         cropped_img = crop_chessboard(img)
         square_maker(img, cropped_img)
-        #board_display()
-        
-        #output += subprocess.check_output(["python", "board_display_and_actions.py"], stderr=subprocess.STDOUT, creationflags=subprocess.CREATE_NO_WINDOW)
+        board_display()
+
         screenshot_error_label.config(text="")
         return True
     except subprocess.CalledProcessError as e:
@@ -47,7 +46,8 @@ def run_mainloop():
     root.title("Chess")
     root.geometry("300x190")
 
-    take_screenshot_button = ttk.Button(root, text="Take a Screenshot", command=lambda: screenshot_button_click(screenshot_error_label))
+    take_screenshot_button = ttk.Button(root, text="Take a Screenshot",
+                                        command=lambda: screenshot_button_click(screenshot_error_label))
     take_screenshot_button.pack(pady=10)
 
     screenshot_error_label = tk.Label(root, text="", fg="red")
@@ -56,7 +56,8 @@ def run_mainloop():
     fen_entry = tk.Entry(root, width=40)
     fen_entry.pack(pady=5)
 
-    fen_button = ttk.Button(root, text="Load FEN", command=lambda: fen_button_click(fen_entry.get(), fen_error_label, fen_entry))
+    fen_button = ttk.Button(root, text="Load FEN",
+                            command=lambda: fen_button_click(fen_entry.get(), fen_error_label, fen_entry))
     fen_button.pack(pady=5)
 
     fen_error_label = tk.Label(root, text="", fg="red")
@@ -66,4 +67,4 @@ def run_mainloop():
 
 
 if __name__ == "__main__":
-    main()
+    run_mainloop()
