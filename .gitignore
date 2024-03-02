@@ -6,3 +6,6 @@ _64_squares/*
 !_64_squares/.gitkeep
 __pycache__
 .env
+_64_squares/
+build/
+stockfish/

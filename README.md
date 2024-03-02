@@ -16,7 +16,7 @@ The ultimate goal of the project is to identify the type of piece in each square
 
 ![Trained model](https://i.imgur.com/1glnIh6.png)
 
-# The program consists of several Python scripts:
+## The program consists of several Python scripts:
 
 **screenshot.py**: Captures a screenshot of the current window displaying the chessboard.   
 **crop_the_screenshot.py**: Crops the chessboard out of the screenshot.   
@@ -27,9 +27,11 @@ The ultimate goal of the project is to identify the type of piece in each square
 **main.py**: Contains the main function to run the program.
 
 
+## Dependencies
 
+- Ensure Stockfish is installed on your system. The application requires Stockfish to function properly.
 
-# Libraries
+## Libraries
 
 - ***chess***    
 - ***os***    
