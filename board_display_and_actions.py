@@ -129,9 +129,9 @@ class ChessBoardGUI(tk.Tk):
         button_height = 25
         padx = 5
 
-        if not hasattr(self, 'history_button'):  # Check if the history_button attribute exists
+        if not hasattr(self, 'history_button'):
             self.history_button = tk.Button(self.button_area, text="FEN History", command=self.history_button_action, width=button_width, state=tk.DISABLED)
-            self.history_button.place(x=padx, y=self.button_area['height'] - 5, width=button_width, height=button_height)  # Adjust the y-coordinate
+            self.history_button.place(x=padx, y=self.button_area['height'] - 5, width=button_width, height=button_height)
 
 
     def create_evaluation_best_move_buttons(self):
@@ -148,7 +148,7 @@ class ChessBoardGUI(tk.Tk):
         button_height = 25
         padx = 5
         middle_button_space = 10
-        offset = 3 # Change this value to adjust the height of the labels
+        offset = 3
 
         self.evaluation_button = tk.Button(self.button_area, text="Evaluation", command=self.evaluation_button_action, width=button_width)
         self.evaluation_button.place(x=padx, y=(self.button_area['height'] - button_height) // 2, width=button_width, height=button_height)
@@ -179,8 +179,8 @@ class ChessBoardGUI(tk.Tk):
         self.best_move = self.stockfish.get_best_move()
         self.eval = self.stockfish.get_evaluation()
         self.draw_pieces()
-        self.history_button.config(state=tk.NORMAL)  # Enable the FEN History button
-        self.fen_history.append(self.fen)  # Add this line to append the current FEN to the history list
+        self.history_button.config(state=tk.NORMAL)
+        self.fen_history.append(self.fen)
         self.save_fen_history(self.fen_history)
 
 
@@ -192,8 +192,8 @@ class ChessBoardGUI(tk.Tk):
         self.best_move = self.stockfish.get_best_move()
         self.eval = self.stockfish.get_evaluation()
         self.draw_pieces()
-        self.history_button.config(state=tk.NORMAL)  # Enable the FEN History button
-        self.fen_history.append(self.fen)  # Add this line to append the current FEN to the history list
+        self.history_button.config(state=tk.NORMAL)
+        self.fen_history.append(self.fen)
         self.save_fen_history(self.fen_history)
 
 
@@ -268,8 +268,8 @@ class ChessBoardGUI(tk.Tk):
 
 
     def draw_pieces(self):
-        self.canvas.delete("all")  # Add this line to clear the canvas
-        self.draw_board()  # Add this line to redraw the board
+        self.canvas.delete("all")
+        self.draw_board()
         square_size = 400 // 8
         for i in range(64):
             piece = self.board.piece_at(i)
@@ -288,11 +288,10 @@ class ChessBoardGUI(tk.Tk):
                     (7 - i // 8) * square_size + square_size / 2,
                     image=photo,
                 )
-                self.images.append(photo)  # Add this line to store the image reference in the list
+                self.images.append(photo)
         
 
 if __name__ == "__main__":
     fen = sys.argv[1] if len(sys.argv) > 1 else white_fen
     app = ChessBoardGUI(fen, stockfish)
     app.mainloop()
-

@@ -9,7 +9,6 @@ Chess_Board_ML = os.getenv("Chess_Board_ML_DIR")
 _64_squares = os.getenv("64_squares_DIR")
 
 def crop_chess_board_squares(image, output_folder, square_size=0):
-    #!                                                      DONT FORGET TO CHANGE
     square_width, square_height = square_size, square_size
     letters = ["A", "B", "C", "D", "E", "F", "G", "H", ]
     for i in range(0, 8):

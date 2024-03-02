@@ -34,7 +34,7 @@ def find_chessboard(image, canny_low=50, canny_high=150):
             x, y, w, h = cv2.boundingRect(contour)
             aspect_ratio = float(w) / h
 
-            if 0.8 <= aspect_ratio <= 1.2:  # Assuming the chessboard is roughly square
+            if 0.8 <= aspect_ratio <= 1.2:
                 largest_area = area
                 chessboard_contour = contour
 
